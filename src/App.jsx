@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
-import { useStore } from "./store/useStore";
+import { useStore } from "./store/useStore.js";
 import { transactions } from "./data/mockData";
 
 function App() {
