@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useStore } from "../store/useStore";
 import TransactionTable from "../components/TransactionTable";
+import Chart from "../components/Chart";
 import { motion } from "framer-motion";
 import { ArrowUpCircle, ArrowDownCircle, Wallet } from "lucide-react";
 
@@ -28,7 +29,6 @@ function Dashboard() {
 
   const balance = income - expenses;
 
-  // ✅ Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -54,71 +54,58 @@ function Dashboard() {
         {role === "admin" && (
           <button
             onClick={() => setOpen(true)}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition"
+            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition shadow-md"
           >
             ➕ Add Transaction
           </button>
         )}
       </div>
 
-      {/* 🔥 PREMIUM CARDS */}
+      {/* 🔥 SUMMARY CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* 💵 Income */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-emerald-400 to-green-600 text-white"
-        >
+        <motion.div whileHover={{ scale: 1.05 }}
+          className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-emerald-400 to-green-600 text-white">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold opacity-80">Total Income</h2>
             <ArrowUpCircle size={28} />
           </div>
-
           <p className="text-3xl font-bold mt-3">₹ {income}</p>
-
-          <p className="text-xs mt-1 opacity-80">
-            All earnings received 💰
-          </p>
+          <p className="text-xs opacity-80 mt-1">All earnings 💰</p>
         </motion.div>
 
         {/* 💸 Expenses */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-rose-400 to-pink-600 text-white"
-        >
+        <motion.div whileHover={{ scale: 1.05 }}
+          className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-rose-400 to-pink-600 text-white">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold opacity-80">Total Expenses</h2>
             <ArrowDownCircle size={28} />
           </div>
-
           <p className="text-3xl font-bold mt-3">₹ {expenses}</p>
-
-          <p className="text-xs mt-1 opacity-80">
-            Money you spent 💸
-          </p>
+          <p className="text-xs opacity-80 mt-1">Your spending 💸</p>
         </motion.div>
 
         {/* 🏦 Balance */}
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white"
-        >
+        <motion.div whileHover={{ scale: 1.05 }}
+          className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold opacity-80">Net Balance</h2>
             <Wallet size={28} />
           </div>
-
           <p className="text-3xl font-bold mt-3">₹ {balance}</p>
-
-          <p className="text-xs mt-1 opacity-80">
-            Remaining balance 🏦
-          </p>
+          <p className="text-xs opacity-80 mt-1">Remaining balance 🏦</p>
         </motion.div>
 
       </div>
 
-      {/* 📊 Table */}
-      <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md">
+      {/* 📊 CHART SECTION (UPDATED UI) */}
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-slate-800 dark:to-slate-900 p-6 rounded-2xl shadow-lg">
+        <Chart data={transactions} />
+      </div>
+
+      {/* 📋 TABLE SECTION (UPDATED UI) */}
+      <div className="bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-slate-800 dark:to-slate-900 p-6 rounded-2xl shadow-lg">
         <TransactionTable />
       </div>
 
@@ -137,7 +124,7 @@ function Dashboard() {
                 onChange={(e) =>
                   setForm({ ...form, date: e.target.value })
                 }
-                className="w-full p-2 rounded border dark:bg-slate-700"
+                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
               />
 
               <input
@@ -147,7 +134,7 @@ function Dashboard() {
                 onChange={(e) =>
                   setForm({ ...form, category: e.target.value })
                 }
-                className="w-full p-2 rounded border dark:bg-slate-700"
+                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
               />
 
               <input
@@ -157,7 +144,7 @@ function Dashboard() {
                 onChange={(e) =>
                   setForm({ ...form, amount: e.target.value })
                 }
-                className="w-full p-2 rounded border dark:bg-slate-700"
+                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
               />
 
               <select
@@ -165,7 +152,7 @@ function Dashboard() {
                 onChange={(e) =>
                   setForm({ ...form, type: e.target.value })
                 }
-                className="w-full p-2 rounded border dark:bg-slate-700"
+                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -182,7 +169,7 @@ function Dashboard() {
 
                 <button
                   type="submit"
-                  className="px-3 py-1 bg-indigo-600 text-white rounded"
+                  className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-500"
                 >
                   Add
                 </button>

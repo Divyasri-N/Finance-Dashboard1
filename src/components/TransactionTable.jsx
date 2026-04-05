@@ -9,7 +9,7 @@ function TransactionTable() {
       <table className="w-full text-left border-collapse">
 
         {/* 🔥 Table Header */}
-        <thead className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <thead className="bg-indigo-100 dark:bg-slate-700 text-gray-700 dark:text-gray-200">
           <tr>
             <th className="p-3 text-sm md:text-base">Date</th>
             <th className="p-3 text-sm md:text-base">Category</th>
@@ -19,7 +19,7 @@ function TransactionTable() {
         </thead>
 
         {/* 🔥 Table Body */}
-        <tbody className="bg-white dark:bg-slate-800 transition duration-300">
+        <tbody className="bg-white dark:bg-slate-800">
 
           {transactions.length === 0 ? (
             <tr>
@@ -34,27 +34,40 @@ function TransactionTable() {
             transactions.map((t, i) => (
               <tr
                 key={i}
-                className="border-b dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition duration-300"
+                className="border-b dark:border-slate-700 hover:bg-indigo-50 dark:hover:bg-slate-700 transition"
               >
-                <td className="p-3 text-sm md:text-base">{t.date}</td>
+                {/* 📅 Date */}
+                <td className="p-3 text-sm md:text-base">
+                  {t.date}
+                </td>
 
+                {/* 📂 Category */}
                 <td className="p-3 text-sm md:text-base font-medium">
                   {t.category}
                 </td>
 
-                <td className="p-3 text-sm md:text-base font-semibold">
-                  ₹ {t.amount}
-                </td>
-
+                {/* 💰 Amount */}
                 <td
                   className={`p-3 text-sm md:text-base font-semibold ${
                     t.type === "income"
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-rose-600 dark:text-rose-400"
+                      ? "text-green-600"
+                      : "text-red-500"
+                  }`}
+                >
+                  ₹ {t.amount}
+                </td>
+
+                {/* 🏷 Type (NO BG — clean text only) */}
+                <td
+                  className={`p-3 text-sm md:text-base font-semibold ${
+                    t.type === "income"
+                      ? "text-green-600 dark:text-green-400"
+                      : "text-red-500 dark:text-red-400"
                   }`}
                 >
                   {t.type}
                 </td>
+
               </tr>
             ))
           )}
