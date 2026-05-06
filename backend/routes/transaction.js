@@ -1,34 +1,26 @@
 const express = require("express");
 const router = express.Router();
-const Transaction = require("../models/Transaction"); // ✅ correct
+const Transaction = require("../models/Transaction");
 
 // GET all transactions
 router.get("/", async (req, res) => {
-  try {
-    const data = await Transaction.find();
-    res.json(data);
-  } catch (err) {
-    console.log("ERROR:", err); 
-    res.status(500).json({ error: err.message });
-  }
+  const data = await Transaction.find();
+  res.json(data);
 });
 
 // POST transaction
 router.post("/", async (req, res) => {
-  try {
-    const newTransaction = new Transaction(req.body);
-    const saved = await newTransaction.save();
-    res.json(saved);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  const newTx = new Transaction(req.body);
+  await newTx.save();
+  res.json(newTx);
 });
 
+// ❌ THIS IS WHAT YOU WERE MISSING
 // DELETE transaction
 router.delete("/:id", async (req, res) => {
   try {
     await Transaction.findByIdAndDelete(req.params.id);
-    res.json({ message: "Deleted" });
+    res.json({ message: "Deleted successfully" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

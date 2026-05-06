@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
+import Transactions from "./pages/Transactions";
 import { useStore } from "./store/useStore.js";
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
   return (
     <div className="min-h-screen bg-slate-100 text-slate-800 dark:bg-slate-900 dark:text-white transition duration-300">
 
+      {/* NAVBAR */}
       <div className="p-4 flex flex-wrap justify-between items-center bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg">
 
         <div className="flex gap-10 text-lg font-bold tracking-wide">
@@ -39,6 +41,13 @@ function App() {
             Dashboard
           </button>
 
+          {/* ✅ Transactions Button (already correct) */}
+          <button
+  onClick={() => setPage("transactions")}
+  className={page === "transactions" ? "border-b-2 border-white" : ""}
+>
+  Transactions
+</button>
           <button
             onClick={() => setPage("insights")}
             className={page === "insights" ? "border-b-2 border-white" : ""}
@@ -68,9 +77,13 @@ function App() {
 
       </div>
 
+      {/* PAGE CONTENT */}
       <div className="p-4 md:p-6">
+
         {page === "dashboard" && <Dashboard />}
+        {page === "transactions" && <Transactions />}
         {page === "insights" && <Insights />}
+
       </div>
 
     </div>

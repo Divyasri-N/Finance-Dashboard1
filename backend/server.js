@@ -6,27 +6,27 @@ const cors = require("cors");
 
 const app = express();
 
-// ✅ Middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// 🔍 DEBUG
+// Debug
 console.log("MONGO_URI:", process.env.MONGO_URI);
 
-// ✅ Fix buffering issue
+// Mongoose settings
 mongoose.set("strictQuery", true);
 mongoose.set("bufferCommands", false);
 
-// ✅ Connect FIRST
+// Connect MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB Connected");
 
-    // ✅ LOAD ROUTES ONLY AFTER CONNECTION
+    // Routes
     const transactionRoutes = require("./routes/transaction");
     app.use("/api/transactions", transactionRoutes);
 
-    // ✅ START SERVER
+    // Start server
     app.listen(5000, () => {
       console.log("🚀 Server running on port 5000");
     });
