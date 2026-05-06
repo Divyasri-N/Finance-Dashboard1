@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "../store/useStore";
 import TransactionTable from "../components/TransactionTable";
 import Chart from "../components/Chart";
@@ -8,6 +8,7 @@ import { ArrowUpCircle, ArrowDownCircle, Wallet } from "lucide-react";
 function Dashboard() {
   const transactions = useStore((state) => state.transactions);
   const addTransaction = useStore((state) => state.addTransaction);
+  const fetchTransactions = useStore((state) => state.fetchTransactions);
   const role = useStore((state) => state.role);
 
   const [open, setOpen] = useState(false);
@@ -18,6 +19,10 @@ function Dashboard() {
     amount: "",
     type: "expense",
   });
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
 
   const income = transactions
     .filter((t) => t.type === "income")
@@ -37,7 +42,6 @@ function Dashboard() {
     addTransaction({
       ...form,
       amount: Number(form.amount),
-      id: Date.now(),
     });
 
     setOpen(false);
@@ -47,7 +51,6 @@ function Dashboard() {
   return (
     <div className="space-y-6">
 
-      {/* 🔝 Title + Button */}
       <div className="flex justify-between items-center">
         <h1 className="text-2xl md:text-3xl font-bold">📊 Dashboard</h1>
 
@@ -61,10 +64,8 @@ function Dashboard() {
         )}
       </div>
 
-      {/* 🔥 SUMMARY CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        {/* 💵 Income */}
         <motion.div whileHover={{ scale: 1.05 }}
           className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-emerald-400 to-green-600 text-white">
           <div className="flex items-center justify-between">
@@ -72,10 +73,8 @@ function Dashboard() {
             <ArrowUpCircle size={28} />
           </div>
           <p className="text-3xl font-bold mt-3">₹ {income}</p>
-          <p className="text-xs opacity-80 mt-1">All earnings 💰</p>
         </motion.div>
 
-        {/* 💸 Expenses */}
         <motion.div whileHover={{ scale: 1.05 }}
           className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-rose-400 to-pink-600 text-white">
           <div className="flex items-center justify-between">
@@ -83,10 +82,8 @@ function Dashboard() {
             <ArrowDownCircle size={28} />
           </div>
           <p className="text-3xl font-bold mt-3">₹ {expenses}</p>
-          <p className="text-xs opacity-80 mt-1">Your spending 💸</p>
         </motion.div>
 
-        {/* 🏦 Balance */}
         <motion.div whileHover={{ scale: 1.05 }}
           className="p-5 rounded-2xl shadow-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white">
           <div className="flex items-center justify-between">
@@ -94,25 +91,21 @@ function Dashboard() {
             <Wallet size={28} />
           </div>
           <p className="text-3xl font-bold mt-3">₹ {balance}</p>
-          <p className="text-xs opacity-80 mt-1">Remaining balance 🏦</p>
         </motion.div>
 
       </div>
 
-      {/* 📊 CHART SECTION (UPDATED UI) */}
-      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 dark:from-slate-800 dark:to-slate-900 p-6 rounded-2xl shadow-lg">
+      <div className="bg-gradient-to-br from-indigo-50 to-purple-100 p-6 rounded-2xl shadow-lg">
         <Chart data={transactions} />
       </div>
 
-      {/* 📋 TABLE SECTION (UPDATED UI) */}
-      <div className="bg-gradient-to-br from-emerald-50 to-teal-100 dark:from-slate-800 dark:to-slate-900 p-6 rounded-2xl shadow-lg">
+      <div className="bg-gradient-to-br from-emerald-50 to-teal-100 p-6 rounded-2xl shadow-lg">
         <TransactionTable />
       </div>
 
-      {/* 🔥 MODAL FORM */}
       {open && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
-          <div className="bg-white dark:bg-slate-800 p-6 rounded-xl w-80 space-y-4 shadow-xl">
+          <div className="bg-white p-6 rounded-xl w-80 space-y-4 shadow-xl">
 
             <h2 className="text-lg font-bold">Add Transaction</h2>
 
@@ -121,38 +114,30 @@ function Dashboard() {
               <input
                 type="date"
                 value={form.date}
-                onChange={(e) =>
-                  setForm({ ...form, date: e.target.value })
-                }
-                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
+                onChange={(e) => setForm({ ...form, date: e.target.value })}
+                className="w-full p-2 rounded border"
               />
 
               <input
                 type="text"
                 placeholder="Category"
                 value={form.category}
-                onChange={(e) =>
-                  setForm({ ...form, category: e.target.value })
-                }
-                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
+                onChange={(e) => setForm({ ...form, category: e.target.value })}
+                className="w-full p-2 rounded border"
               />
 
               <input
                 type="number"
                 placeholder="Amount"
                 value={form.amount}
-                onChange={(e) =>
-                  setForm({ ...form, amount: e.target.value })
-                }
-                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
+                onChange={(e) => setForm({ ...form, amount: e.target.value })}
+                className="w-full p-2 rounded border"
               />
 
               <select
                 value={form.type}
-                onChange={(e) =>
-                  setForm({ ...form, type: e.target.value })
-                }
-                className="w-full p-2 rounded border dark:bg-slate-700 focus:ring-2 focus:ring-indigo-400"
+                onChange={(e) => setForm({ ...form, type: e.target.value })}
+                className="w-full p-2 rounded border"
               >
                 <option value="expense">Expense</option>
                 <option value="income">Income</option>
@@ -169,7 +154,7 @@ function Dashboard() {
 
                 <button
                   type="submit"
-                  className="px-3 py-1 bg-indigo-600 text-white rounded hover:bg-indigo-500"
+                  className="px-3 py-1 bg-indigo-600 text-white rounded"
                 >
                   Add
                 </button>
